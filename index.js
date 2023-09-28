@@ -1,46 +1,31 @@
 import _ from 'lodash';
 
-const showInfo = (content) => {
-  const data = content.split('\n').slice(1).map((row) => row.split(';').slice(0));
-  console.log(data);
+export default function solution(content) {
+  // BEGIN
 
-  // step 1
-  console.log(`Count: ${data.length}`);
+  // step1
+  const formatting = content.trim().split('\n').slice(1);
+  // console.log(formatting);
+  console.log(`Count: ${formatting.length}`);
 
-  // step 2
-  const allCities = data.map((el) => (el[2]));
+  // step2
+  const result1 = formatting.map((el) => el.slice(0, -1).split(';'));
+  // console.log(result1);
 
-  console.log(`Cities: ${allCities.join(', ')}`);
-  // step 3
-  const maxSalary = _.max(data.map((el) => parseInt(el[5])));
+  const citiesForLocation = result1.map((n) => n[2]);
+  console.log(`Cities: ${(citiesForLocation).join(', ')}`);
 
-  console.log(`Maximum salary: ${maxSalary}`);
+  // step3
+  const salary = result1.map((n) => n[5].slice(0, 6));
+  const max = Math.max(...salary);
+  console.log(`Maximum salary: ${max}`);
 
-  // step 4
-  const graduatedHigher = data.map((el) => el[6]);
-  const filteredGraduatedHigher = graduatedHigher.filter((level) => level && level.includes('Высшее'));
-
-  console.log(`Graduated: ${filteredGraduatedHigher.length}`);
-  // step 5
-  const typesCompany = data.map((types) => types[0]);
-
-  typesCompany[0] = 'ООО';
-  typesCompany[1] = 'ЗАО';
-  typesCompany[2] = 'ООО';
-  typesCompany[3] = 'ООО';
-  typesCompany[4] = 'ОАО';
-  typesCompany[5] = 'ООО';
-  typesCompany[6] = 'ООО';
-  typesCompany[7] = 'ООО';
-
-  const sortTypesCompany = new Set (typesCompany);
-  const uniqueTypes = [...sortTypesCompany];
-
-  const joinedTypes = uniqueTypes.join(', ');
-  const deleteEndComma = _.trimEnd(joinedTypes, ',');
-  console.log(`Company types: ${deleteEndComma}`);
-
-};
-
-export default showInfo;
-
+  // step4
+  const graduated = result1.map((n) => n[6].slice(0, 6));
+  const filtered = graduated.filter((m) => m === 'Высшее');
+  console.log(`Graduated: ${filtered.length}`);
+  // step5
+  const company = result1.map((n) => n[0].slice(0, 3));
+  const uniq = _.uniq(company);
+  console.log(`Company types: ${(uniq).join(', ')}`);
+}
